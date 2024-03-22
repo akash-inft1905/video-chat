@@ -2,39 +2,30 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const { ExpressPeerServer } = require("peer");
-const { v4: uuidv4 } = require("uuid");
-
 const port = process.env.PORT || 4000;
-const peerServer = ExpressPeerServer(server, {
+const { v4: uuidv4 } = require("uuid");
+const { ExpressPeerServer } = require("peer");
+const peer = ExpressPeerServer(server, {
   debug: true,
 });
-
+app.use("/peerjs", peer);
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use("/peerjs", peerServer);
-
 app.get("/", (req, res) => {
-  res.redirect(`/${uuidv4()}`);
+  res.send(uuidv4());
 });
-
 app.get("/:room", (req, res) => {
-  res.render("index", { roomId: req.params.room });
+  res.render("index", { RoomId: req.params.room });
 });
-
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, userId) => {
-    socket.join(roomId);
-    // Broadcast to everyone in the room except the current user
-    socket.to(roomId).broadcast.emit("user-connected", userId);
-
+  socket.on("newUser", (id, room) => {
+    socket.join(room);
+    socket.to(room).broadcast.emit("userJoined", id);
     socket.on("disconnect", () => {
-      // Notify other users in the room about disconnection
-      socket.to(roomId).broadcast.emit("user-disconnected", userId);
+      socket.to(room).broadcast.emit("userDisconnect", id);
     });
   });
 });
-
 server.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+  console.log("Server running on port : " + port);
 });
