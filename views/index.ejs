@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Video App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #videoDiv {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        max-width: 1000px;
+        width: 90%;
+        margin: 0 auto;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .video-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+
+      video {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      #footer {
+        width: 100%;
+        padding: 10px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        text-align: center;
+      }
+
+      button {
+        height: 40px;
+        width: 120px;
+        text-align: center;
+        border-radius: 20px;
+        border: none;
+        outline: none;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+    <script type="text/javascript">
+      var roomID = "<%= RoomId %>";
+    </script>
+    <script
+      src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"
+      defer
+    ></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="/index.js" charset="utf-8" defer></script>
+  </head>
+
+  <body>
+    <div id="videoDiv"></div>
+    <div id="footer">
+      <!-- Add footer content here if needed -->
+    </div>
+  </body>
+</html>
